@@ -7,23 +7,27 @@ const mongoose = require("mongoose");
 // schema will enforce consistency in all our documents (records)
 const Schema = mongoose.Schema;
 
-const ToDoSchema = new Schema({
-  title: {
+const hangerSchema = new Schema({
+  hangerName: {
     type: String,
     required: true
   },
-  detail: {
+  construction: {
     type: String,
     required: true
   },
-  completed: {
+  color: {
+    type: String,
+    required: true
+  },
+  sturdiness: {
+    type: String,
+    required: true
+  },
+  pantClips: {
     type: Boolean,
-    required: true
-  },
-  priority: {
-    type: Number,
     required: true
   }
 });
 
-module.exports = mongoose.model("ToDos", ToDoSchema);
+module.exports = mongoose.model("hangers", hangerSchema);
