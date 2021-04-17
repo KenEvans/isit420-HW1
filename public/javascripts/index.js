@@ -1,12 +1,13 @@
 
-function ToDo(pTitle, pDetail, pPriority) {
-    this.title= pTitle;
-    this.detail = pDetail;
-    this.priority = pPriority;
-    this.completed = false;
+function Hanger(pHangerName, pConstruction, pColor, pSturdiness, pPantClips) {
+    this.hangerName = pHangerName;
+    this.construction = pConstruction;
+    this.color = pColor;
+    this.sturdiness = pSturdiness;
+    this.pantClips = pPantClips;
   }
-  var ClientNotes = [];  // our local copy of the cloud data
-
+  
+var HangerList = [];  // our local copy of the cloud data
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var tTitle = document.getElementById("title").value;
         var tDetail = document.getElementById("detail").value;
         var tPriority = document.getElementById("priority").value;
-        var oneToDo = new ToDo(tTitle, tDetail, tPriority);
+        var oneToDo = new Hanger(tTitle, tDetail, tPriority);
 
         $.ajax({
             url: '/NewToDo' ,
@@ -35,20 +36,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
   
 
 
+    // Code for deleting a single hanger - modified by Ken Evans
     document.getElementById("delete").addEventListener("click", function () {
         
-        var whichToDo = document.getElementById('deleteTitle').value;
+        var whichHanger = document.getElementById('deleteName').value;
         var idToDelete = "";
-        for(i=0; i< ClientNotes.length; i++){
-            if(ClientNotes[i].title === whichToDo) {
-                idToDelete = ClientNotes[i]._id;
+        for(i=0; i< HangerList.length; i++){
+            if(HangerList[i].hangerName === whichHanger) {
+                idToDelete = HangerList[i]._id;
            }
         }
         
         if(idToDelete != "")
         {
                      $.ajax({  
-                    url: 'DeleteToDo/'+ idToDelete,
+                    url: 'DeleteHanger/'+ idToDelete,
                     type: 'DELETE',  
                     contentType: 'application/json',  
                     success: function (response) {  
@@ -60,17 +62,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 });  
         }
         else {
-            console.log("no matching Subject");
+            console.log("NO matching Hanger Name! Unable to DELETE");
         } 
     });
 
 
 
+    var idToFind = ""; // using the same value from the find operation for the modify
+
+    // Code for modifying a single hanger - modified by Ken Evans
     document.getElementById("msubmit").addEventListener("click", function () {
         var tTitle = document.getElementById("mtitle").value;
         var tDetail = document.getElementById("mdetail").value;
         var tPriority = document.getElementById("mpriority").value;
-        var oneToDo = new ToDo(tTitle, tDetail, tPriority);
+        var oneToDo = new Hanger(tTitle, tDetail, tPriority);
         oneToDo.completed =  document.getElementById("mcompleted").value;
         
             $.ajax({
@@ -89,22 +94,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
        
     });
 
-
     
-    var idToFind = ""; // using the same value from the find operation for the modify
-    // find one to modify
+    
+    // Code to find one hanger to change - modified by Ken Evans
     document.getElementById("find").addEventListener("click", function () {
-        var tTitle = document.getElementById("modTitle").value;
-         idToFind = "";
-        for(i=0; i< ClientNotes.length; i++){
-            if(ClientNotes[i].title === tTitle) {
-                idToFind = ClientNotes[i]._id;
+        var tName = document.getElementById("modName").value;
+        idToFind = "";
+        for(i=0; i< HangerList.length; i++){
+            if(HangerList[i].hangerName === tName) {
+                idToFind = HangerList[i]._id;
            }
         }
         console.log(idToFind);
  
-        $.get("/FindToDo/"+ idToFind, function(data, status){ 
-            console.log(data[0].title);
+        $.get("/FindHanger/"+ idToFind, function(data, status){ 
+            console.log(data[0].hangerName);
             document.getElementById("mtitle").value = data[0].title;
             document.getElementById("mdetail").value= data[0].detail;
             document.getElementById("mpriority").value = data[0].priority;
@@ -127,13 +131,13 @@ ul.innerHTML = "";  // clears existing list so we don't duplicate old ones
 //var ul = document.createElement('ul')
 
 $.get("/ToDos", function(data, status){  // AJAX get
-    ClientNotes = data;  // put the returned server json data into our local array
+    HangerList = data;  // put the returned server json data into our local array
 
     // sort array by one property
-    ClientNotes.sort(compare);  // see compare method below
+    HangerList.sort(compare);  // see compare method below
     console.log(data);
     //listDiv.appendChild(ul);
-    ClientNotes.forEach(ProcessOneToDo); // build one li for each item in array
+    HangerList.forEach(ProcessOneToDo); // build one li for each item in array
     function ProcessOneToDo(item, index) {
         var li = document.createElement('li');
         ul.appendChild(li);
