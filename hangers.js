@@ -25,7 +25,7 @@ const hangerSchema = new Schema({
     required: true
   },
   pantClips: {
-    type: Boolean,
+    type: String,
     required: true
   }
 });

@@ -105,28 +105,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var tSturdiness = document.getElementById("msturdiness").value;
         var tPantClips = document.getElementById("mpantclips").value;
 
-        if (tPantClips != true || tPantClips != 'True') {
-            tPantClips = false;
-        } else {
-            tPantClips = true;
-        }
-
-
         var oneHanger = new Hanger(tName, tConstruction, tColor, tSturdiness, tPantClips);
         
-            $.ajax({
-                url: 'UpdateHanger/'+idToFind,
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(oneHanger),
-                    success: function (response) {  
-                        console.log(response);  
-                    },  
-                    error: function () {  
-                        console.log('Error in Update Operation');  
-                    }  
-                });   
-       
+        $.ajax({
+            url: 'UpdateHanger/'+idToFind,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(oneHanger),
+                success: function (response) {  
+                    console.log(response);  
+                },  
+                error: function () {  
+                    console.log('Error in Update Operation');  
+                }  
+        }); 
     });
 
     
