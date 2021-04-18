@@ -70,32 +70,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     var idToFind = ""; // using the same value from the find operation for the modify
 
-    // Code for modifying a single hanger - modified by Ken Evans
-    document.getElementById("msubmit").addEventListener("click", function () {
-        var tTitle = document.getElementById("mtitle").value;
-        var tDetail = document.getElementById("mdetail").value;
-        var tPriority = document.getElementById("mpriority").value;
-        var oneToDo = new Hanger(tTitle, tDetail, tPriority);
-        oneToDo.completed =  document.getElementById("mcompleted").value;
-        
-            $.ajax({
-                url: 'UpdateToDo/'+idToFind,
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(oneToDo),
-                    success: function (response) {  
-                        console.log(response);  
-                    },  
-                    error: function () {  
-                        console.log('Error in Operation');  
-                    }  
-                });  
-            
-       
-    });
-
-    
-    
     // Code to find one hanger to change - modified by Ken Evans
     document.getElementById("find").addEventListener("click", function () {
         var tName = document.getElementById("modName").value;
@@ -109,14 +83,50 @@ document.addEventListener("DOMContentLoaded", function (event) {
  
         $.get("/FindHanger/"+ idToFind, function(data, status){ 
             console.log(data[0].hangerName);
-            document.getElementById("mtitle").value = data[0].title;
-            document.getElementById("mdetail").value= data[0].detail;
-            document.getElementById("mpriority").value = data[0].priority;
-            document.getElementById("mcompleted").value = data[0].completed;
+            document.getElementById("mname").value = data[0].hangerName;
+            document.getElementById("mconstruction").value= data[0].construction;
+            document.getElementById("mcolor").value = data[0].color;
+            document.getElementById("msturdiness").value = data[0].sturdiness;
+            document.getElementById("mpantclips").value = data[0].pantClips;
            
-
         });
     });
+
+
+
+    // Code for modifying a single hanger - modified by Ken Evans
+    document.getElementById("msubmit").addEventListener("click", function () {
+        var tName = document.getElementById("mname").value;
+        var tConstruction = document.getElementById("mconstruction").value;
+        var tColor = document.getElementById("mcolor").value;
+        var tSturdiness = document.getElementById("msturdiness").value;
+        var tPantClips = document.getElementById("mpantclips").value;
+
+        if (tPantClips != true || tPantClips != 'True') {
+            tPantClips = false;
+        } else {
+            tPantClips = true;
+        }
+
+
+        var oneHanger = new Hanger(tName, tConstruction, tColor, tSturdiness, tPantClips);
+        
+            $.ajax({
+                url: 'UpdateHanger/'+idToFind,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(oneHanger),
+                    success: function (response) {  
+                        console.log(response);  
+                    },  
+                    error: function () {  
+                        console.log('Error in Update Operation');  
+                    }  
+                });   
+       
+    });
+
+    
 
     // get the server data into the local array
     updateList();
