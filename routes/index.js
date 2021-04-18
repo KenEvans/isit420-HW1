@@ -39,32 +39,32 @@ router.get('/', function(req, res) {
 
 
 
-/* GET all ToDos */
-router.get('/ToDos', function(req, res) {
+/* GET all Hanger - modified by Khalid Mohamed */
+router.get('/Hanger', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
-  Hangers.find({}, (err, AllToDos) => {
+  Hangers.find({}, (err, AllHangers) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
     }
-    res.status(200).json(AllToDos);
+    res.status(200).json(AllHangers);
   });
 });
 
 
 
-/* post a new ToDo and push to Mongo */
-router.post('/NewToDo', function(req, res) {
+/* post a new Hanger and push to Mongo -  modified by Khalid Mohamed */
+router.post('/NewHanger', function(req, res) {
 
-    let oneNewToDo = new Hangers(req.body);  // call constuctor in ToDos code that makes a new mongo ToDo object
+    let oneNewHanger = new Hangers(req.body);  // call constuctor in Hangers code that makes a new mongo ToDo object
     console.log(req.body);
-    oneNewToDo.save((err, todo) => {
+    oneNewHanger.save((err, hanger) => {
       if (err) {
         res.status(500).send(err);
       }
       else {
-      console.log(todo);
-      res.status(201).json(todo);
+      console.log(hanger);
+      res.status(201).json(hanger);
       }
     });
 });

@@ -9,22 +9,25 @@ function Hanger(pHangerName, pConstruction, pColor, pSturdiness, pPantClips) {
   
 var HangerList = [];  // our local copy of the cloud data
 
+//  modified by Khalid Mohamed
 document.addEventListener("DOMContentLoaded", function (event) {
 
     document.getElementById("submit").addEventListener("click", function () {
-        var tTitle = document.getElementById("title").value;
-        var tDetail = document.getElementById("detail").value;
-        var tPriority = document.getElementById("priority").value;
-        var oneToDo = new Hanger(tTitle, tDetail, tPriority);
+        var tHangerName = document.getElementById("hangerName").value;
+        var tconstruction = document.getElementById("construction").value;
+        var tcolor = document.getElementById("color").value;
+        var tsturdiness = document.getElementById("sturdiness").value;
+        var tpantClips = document.getElementById("pantClips").value;
+        var oneHanger = new Hanger(tHangerName, tconstruction, tcolor, tsturdiness, tpantClips);
 
         $.ajax({
-            url: '/NewToDo' ,
+            url: '/NewHanger' ,
             method: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            data: JSON.stringify(oneToDo),
+            data: JSON.stringify(oneHanger),
             success: function (result) {
-                console.log("added new note")
+                console.log("added new hanger")
             }
 
         });
@@ -140,11 +143,12 @@ ul.innerHTML = "";  // clears existing list so we don't duplicate old ones
 
 //var ul = document.createElement('ul')
 
-$.get("/ToDos", function(data, status){  // AJAX get
+//  modified by Khalid Mohamed
+$.get("/Hanger", function(data, status){  // AJAX get
     HangerList = data;  // put the returned server json data into our local array
 
     // sort array by one property
-    HangerList.sort(compare);  // see compare method below
+    //HangerList.sort(compare);  // see compare method below
     console.log(data);
     //listDiv.appendChild(ul);
     HangerList.forEach(ProcessOneToDo); // build one li for each item in array
@@ -152,7 +156,7 @@ $.get("/ToDos", function(data, status){  // AJAX get
         var li = document.createElement('li');
         ul.appendChild(li);
 
-        li.innerHTML=li.innerHTML + index + ": " + " Priority: " + item.priority + "  " + item.title + ":  " + item.detail + " Done? "+ item.completed;
+        li.innerHTML=li.innerHTML + index + ": " + " Hanger Name: " + item.hangerName + " Construction: " + item.construction + " Color: " + item.color + " Sturdiness: " + item.sturdiness +  " Pant Clips? "+ item.pantClips;
     }
 });
 }
